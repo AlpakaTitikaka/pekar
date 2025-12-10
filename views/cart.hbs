@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Пекарня "Янчик-Пеканчик"</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="stylesheets/cart.css">
+    <link rel="stylesheet" href="stylesheets/product.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    {{{ header }}}
+</header>
+
+    <main>
+        <section class="cart">
+            <div class="container">
+                <h1 class="section-title">Корзина</h1>
+                <div id="cart-items" class="cart-items">
+
+                </div>
+                <form id="order-form" class="order-form">
+                    <div class="form-container">
+                        <h2 class="form-title">Данные получателя</h2>
+                        <input id="first-name" type="text" placeholder="Фамилия" class="form-input" required>
+                        <input id="name" type="text" placeholder="Имя" class="form-input" required>
+                        <input id="last-name" type="text" placeholder="Отчество" class="form-input" required>
+                    </div>
+                    <div class="form-container">
+                        <h2 class="form-title">Контакты</h2>
+                        <input id="phone" type="tel" placeholder="Номер телефона" class="form-input" required>
+                        <input id="email" type="email" placeholder="Email" class="form-input" required>
+                    </div>
+
+                    <div class="form-container">
+                        <h2 class="form-title">Доставка</h2>
+
+                        <select id="delivery-type" class="form-select">
+                            {{#each order_types}}
+                                <option value="{{this.id}}">{{this.title}}</option>
+                            {{/each}}
+                        </select>
+                        <div id="address-block" class="address-block" style="display: none;">
+                            <input type="text" id="address" placeholder="Адрес доставки" class="form-input" required oninput="geocode()">
+                            <div id="yandex-map" class="map-container yandex-map"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary form-button">Оформить заказ</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+<footer>
+    {{{ footer }}}
+</footer>
+
+<script src="/javascripts/script.js"></script>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=3b7332d1-075a-495e-a050-84855d5fcc43&lang=ru_RU&suggest_apikey=31977c77-ec11-4d19-ada4-f8c41cd1e205"></script>
+<script defer>
+    const grid = document.querySelector(".cart-items");
+    const deliveryType = document.getElementById('delivery-type');
+    const addressBlock = document.getElementById('address-block');
+    let myMap, clientPlacemark;
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        displayCart();
+        deliveryType.addEventListener('change', () => {
+            addressBlock.style.display = deliveryType.value === "2" ? 'flex' : 'none';
+            if (deliveryType.value === "2") {
+                initMap();
+            }
+        });
+
+        document.getElementById('order-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (cart.length === 0) {
+                showMessage('В корзине ничего нет!');
+                return;
+            }
+
+            const data = {
+
+            }
+
+            showMessage('Заказ оформлен!');
+        });
+
+    });
+
+    function displayCart() {
+        const uniqueCart = cart.reduce((acc, item) => {
+            const existing = acc.find(p => p.id === item.id);
+            if (existing) {
+                existing.quantity += item.quantity;
+            } else {
+                acc.push(item);
+            }
+            return acc;
+        }, []);
+        displayProducts(uniqueCart.filter(item => item.quantity > 0));
+    }
+
+    function displayProducts(products) {
+        grid.innerText = "";
+
+        products.forEach((product) => {
+            const html = `
+                <div class="cart-item" data-id="${product.id}">
+                    <div class="image-container" style="background-image: url('/images/products/${product.filename}')">
+                    </div>
+                    <div class="item-info">
+                        <h3 class="product-title">${product.title}</h3>
+                        <div class="weight">${product.weight_g} г</div>
+                    </div>
+                    <div class="quantity">
+                        <button onclick="changeQuantity(${product.id}, -1)">−</button>
+                        <span id="quantity-element-${product.id}">${product.quantity || 1}</span>
+                        <button onclick="changeQuantity(${product.id}, 1)">+</button>
+                    </div>
+                    <div class="item-total">${(product.price * (product.quantity || 1)).toLocaleString()} ₽</div>
+                    <button onclick="removeFromCart(${product.id})" class="remove-btn">×</button>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', html);
+        });
+
+        updateCartCount();
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        displayCart();
+    }
+
+    function updateCartCount() {
+        cart.forEach(
+                (cartItem) => {
+                    const count = (cartItem.quantity || 1);
+                    const qe = document.querySelector(`#quantity-element-${cartItem.id}`);
+                    qe.textContent = count;
+                    qe.style.display = count > 0 ? 'flex' : 'none';
+                }
+        )
+    }
+
+
+    function changeQuantity(id, delta) {
+        const item = cart.find(p => p.id === id);
+        if (item) {
+            item.quantity = (item.quantity || 1) + delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(p => p.id !== id);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+            updateCartCount();
+        }
+    }
+
+
+    function initMap() {
+        ymaps.ready(function () {
+            myMap = new ymaps.Map('yandex-map', MAP_SETTINGS);
+
+            clearMap(myMap);
+
+            const placemark = new ymaps.Placemark(
+                    ...PLACEMARK_SETTINGS
+            );
+
+            const searchControl = new ymaps.control.SearchControl({
+                options: {
+                    size: 'large',        // размер строки
+                    float: 'right',       // положение
+                    noPlacemark: false    // ставить метку автоматически
+                }
+            });
+            // Подключаем автодополнение в поле адреса
+            const suggestView = new ymaps.SuggestView("address");
+
+            // Когда пользователь выбирает вариант из подсказок
+            suggestView.events.add("select", (e) => {
+                const address = e.get("item").value;
+                geocodeAddress(address);
+            });
+
+            myMap.controls.add(searchControl);
+
+            // Если пользователь ввёл адрес вручную и нажал Enter
+            document.getElementById("address").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    geocodeAddress(this.value);
+                }
+            });
+
+            // Клик по карте → ставим/двигаем метку и определяем адрес
+            myMap.events.add("click", function(e) {
+                const coords = e.get("coords");
+                setPlacemark(coords);
+                reverseGeocode(coords);
+            });
+
+            myMap.events.add('click', function (e) {
+                var coords = e.get('coords');
+
+                if (clientPlacemark) {
+                    clientPlacemark.geometry.setCoordinates(coords);
+                } else {
+                    clientPlacemark = new ymaps.Placemark(coords, {}, {
+                        preset: 'islands#redDotIcon',
+                        draggable: true   // можно таскать метку мышкой
+                    });
+                    myMap.geoObjects.add(clientPlacemark);
+
+                    // При перетаскивании метки тоже обновляем адрес
+                    clientPlacemark.events.add('dragend', function () {
+                        var newCoords = clientPlacemark.geometry.getCoordinates();
+                        reverseGeocode(newCoords);
+                    });
+                }
+
+                reverseGeocode(coords);
+            });
+
+            myMap.geoObjects.add(placemark);
+
+            myMap.panes.get('ground').getElement().style.filter = FILTER;
+        });
+    }
+
+    function setPlacemark(coords) {
+        if (!clientPlacemark) {
+            clientPlacemark = new ymaps.Placemark(coords, {}, {
+                preset: 'islands#redDotIcon',
+                draggable: true
+            });
+
+            // При перетаскивании метки обновляем адрес
+            clientPlacemark.events.add("dragend", function () {
+                const newCoords = clientPlacemark.geometry.getCoordinates();
+                reverseGeocode(newCoords);
+            });
+
+            myMap.geoObjects.add(clientPlacemark);
+        } else {
+            clientPlacemark.geometry.setCoordinates(coords);
+        }
+    }
+
+    function reverseGeocode(coords) {
+        ymaps.geocode(coords).then(res => {
+            const obj = res.geoObjects.get(0);
+            const full = obj.getAddressLine();
+
+            document.getElementById("address").value = full;
+            myMap.setCenter(coords, 16);
+        });
+    }
+
+    function geocodeAddress(address) {
+        if (!address) return;
+
+        ymaps.geocode(address, { results: 1 }).then(res => {
+            const obj = res.geoObjects.get(0);
+            if (!obj) {
+                alert("Адрес не найден.");
+                return;
+            }
+
+            const coords = obj.geometry.getCoordinates();
+            const full = obj.getAddressLine();
+
+            setPlacemark(coords);
+            document.getElementById("address").value = full;
+
+            myMap.setCenter(coords, 16);
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

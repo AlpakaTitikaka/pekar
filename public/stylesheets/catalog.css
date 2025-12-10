@@ -1,0 +1,74 @@
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 40px 0 60px;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-input,
+.filter-select {
+    padding: 14px 20px;
+    border: 2px solid #E8D9C9;
+    border-radius: 50px;
+    background: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #4A3A2C;
+    min-width: 240px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(180,150,120,0.08);
+}
+
+.filter-input::placeholder {
+    color: #8B7B6A;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: #6B5544;
+    box-shadow: 0 6px 25px rgba(107,85,68,0.18);
+    transform: translateY(-3px);
+}
+
+/* Стрелочка у select — делаем в цвете акцента */
+.filter-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'%3E%3Cpath fill='%236B5544' d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    padding-right: 50px;
+}
+
+/* Кнопка "Применить фильтры" */
+.filters .btn-secondary {
+    background: #6B5544;
+    color: #FFFFFF;
+    padding: 14px 32px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 6px 20px rgba(107,85,68,0.25);
+}
+
+.filters .btn-secondary:hover {
+    background: #543F30;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(107,85,68,0.35);
+}
+
+/* Адаптив — на мобильных фильтры в столбик */
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-input,
+    .filter-select,
+    .filters .btn-secondary {
+        min-width: auto;
+        width: 100%;
+    }
+}

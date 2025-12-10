@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - Пекарня "Янчик-Пеканчик"</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/catalog.css">
+    <link rel="stylesheet" href="/stylesheets/product.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    {{{ header }}}
+</header>
+
+    <main>
+        <section class="catalog">
+            <div class="container">
+                <h1 class="section-title">Каталог товаров</h1>
+                <div class="filters">
+                    <input type="text" id="search" placeholder="Поиск по названию" class="filter-input" onchange="filterProducts()">
+                    <select id="category" class="filter-select" onchange="filterProducts()">
+                        <option value="">Все категории</option>
+                        {{#each categories}}
+                            <option value="{{this.id}}">{{this.title}}</option>
+                        {{/each}}
+                    </select>
+                    <select id="price" class="filter-select" onchange="filterProducts()">
+                        <option value="">Сортировка по цене</option>
+                        <option value="low">По возрастанию</option>
+                        <option value="high">По убыванию</option>
+                    </select>
+                    <button onclick="clearFilters();" class="btn btn-secondary">Очистить фильтры</button>
+                </div>
+                <div class="product-grid">
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+<footer>
+{{{ footer }}}
+</footer>
+
+<script src="javascripts/script.js"></script>
+<script>
+    const products = {{{productsJson}}};
+
+    function filterProducts() {
+        const search = document.getElementById('search').value.toLowerCase();
+        const category = document.getElementById('category').value;
+        const priceSort = document.getElementById('price').value;
+
+        let filtered = products.filter(p =>
+                (!search || p.title.toLowerCase().includes(search)) &&
+                (!category || p.category_id == category)
+        );
+
+        if (priceSort === 'low') {
+            filtered.sort((a, b) => a.price - b.price);
+        } else if (priceSort === 'high') {
+            filtered.sort((a, b) => b.price - a.price);
+        }
+
+        displayProducts(filtered);
+    }
+
+    function displayProducts(prods) {
+        const grid = document.querySelector('.product-grid');
+
+        grid.innerText = "";
+
+        prods.forEach((product, index) => {
+            const html = `
+                <div class="product-card"
+                             data-category="${product.category_id}"
+                             data-price="${product.price}"
+                             style="opacity:0; transform:translateY(20px);">
+                            <img src="images/products/${product.filename}" alt="${product.title}">
+                            <div class="info">
+                                <h3>${product.title}</h3>
+                                <div class="price">${product.price} ₽</div>
+                                <a href="/product/${product.id}" class="btn btn-primary">Подробнее</a>
+                            </div>
+                        </div>
+            `;
+
+            grid.insertAdjacentHTML('beforeend', html);
+
+            const card = grid.lastElementChild;
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * MIN_TIMEOUT);
+        });
+    }
+
+    function clearFilters() {
+        document.getElementById('search').value = "";
+        document.getElementById('category').value = "";
+        document.getElementById('price').value = "";
+
+        displayProducts(products);
+    }
+
+    displayProducts(products);
+</script>
+
+
+</body>
+</html>

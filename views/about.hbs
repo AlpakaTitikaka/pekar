@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас - Пекарня "Янчик-Пеканчик"</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/about.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    {{{ header }}}
+</header>
+
+    <main>
+        <section class="about-hero">
+            <div class="container">
+                <h1 class="hero-title">О пекарне "Янчик-Пеканчик"</h1>
+                <p class="hero-subtitle">Традиции и страсть к выпечке с 2010 года. Мы создаем моменты счастья через вкус свежего хлеба.</p>
+                <div class="about-bg-overlay"></div>
+            </div>
+        </section>
+
+        <section class="about-story">
+            <div class="container">
+                <h2 class="section-title">Наша история</h2>
+                <div class="story-content">
+                    <p>Пекарня "Янчик-Пеканчик" была основана в 2010 году в сердце Москвы мастерами, влюбленными в искусство хлебопечения. С тех пор мы растем, сохраняя семейные рецепты и натуральные ингредиенты.</p>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h3>2010</h3>
+                            <p>Открытие первой пекарни</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h3>2015</h3>
+                            <p>Расширение ассортимента тортами</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h3>2020</h3>
+                            <p>Запуск доставки</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <h3>2025</h3>
+                            <p>Онлайн-магазин и новые вкусы</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="team">
+            <div class="container">
+                <h2 class="section-title">Наша команда</h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <img src="/images/team/dasha.jpg" alt="Мастер-пекарь">
+                        <h3>Дарья Алексеева</h3>
+                        <p>Главный пекарь с 15-летним стажем</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="/images/team/olesya.jpg" alt="Шеф-повар">
+                        <h3>Олеся Журавлева</h3>
+                        <p>Создатель десертов</p>
+                    </div>
+                    <div class="team-card">
+                        <img src="/images/team/yana.jpg" alt="Менеджер">
+                        <h3>Яна Афанасова</h3>
+                        <p>Руководитель производства</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="values">
+            <div class="container">
+                <h2 class="section-title">Наши ценности</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">🍞</div>
+                        <h3>Натуральность</h3>
+                        <p>Только свежие ингредиенты без добавок</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">❤️</div>
+                        <h3>Страсть</h3>
+                        <p>Каждый продукт с душой</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🌿</div>
+                        <h3>Экология</h3>
+                        <p>Устойчивые практики</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<footer>
+    {{{ footer }}}
+</footer>
+
+<script src="javascripts/script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Анимация timeline items
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            item.style.animationDelay = `${(index + 1) * 0.2}s`;
+            item.style.opacity = '1';
+        });
+
+        const cards = document.querySelectorAll('.team-card, .value-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s ease-out';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * MIN_TIMEOUT * 2);
+        });
+
+        // Smooth scroll для nav links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

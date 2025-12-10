@@ -1,0 +1,243 @@
+.about-hero .hero-title {
+    font-size: 64px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    animation: fadeInUp 1.2s ease-out 0.3s both;
+}
+
+.about-hero .hero-subtitle {
+    font-size: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+    animation: fadeInUp 1.2s ease-out 0.3s both;
+}
+
+/* === Наша история + таймлайн === */
+.about-story {
+    padding: 140px 0;
+    background: #FDF9F4;
+}
+
+.story-content p {
+    font-size: 19px;
+    max-width: 860px;
+    margin: 0 auto 70px;
+    text-align: center;
+    line-height: 1.8;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Вертикальная линия */
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background: #E8D9C9;
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px 40px;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+    text-align: left;
+}
+
+/* Точки на таймлайне */
+.timeline-dot {
+    position: absolute;
+    top: 28px;
+    width: 20px;
+    height: 20px;
+    background: #6B5544;
+    border: 5px solid #FDF9F4;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px #E8D9C9;
+}
+
+.timeline-item:nth-child(odd) .timeline-dot { right: -10px; }
+.timeline-item:nth-child(even) .timeline-dot { left: -10px; }
+
+.timeline-item h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: #6B5544;
+    margin: 0 0 8px;
+}
+
+.timeline-item p {
+    margin: 0;
+    font-size: 17px;
+    color: #4A3A2C;
+}
+
+/* Задержки анимации */
+.timeline-item:nth-child(1) { animation-delay: 0.3s; }
+.timeline-item:nth-child(2) { animation-delay: 0.5s; }
+.timeline-item:nth-child(3) { animation-delay: 0.7s; }
+.timeline-item:nth-child(4) { animation-delay: 0.9s; }
+
+/* === Команда === */
+.team {
+    padding: 120px 0;
+    background: linear-gradient(135deg, #FDF9F4 0%, #FFF8F0 100%);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.team-card {
+    background: rgba(255,248,240,0.96);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 15px 45px rgba(180,150,120,0.22);
+    text-align: center;
+    padding: 30px 20px 40px;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.team-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 25px 60px rgba(180,150,120,0.32);
+}
+
+.team-card img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 24px;
+    border: 6px solid #FFFFFF;
+    box-shadow: 0 8px 25px rgba(107,85,68,0.2);
+}
+
+.team-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: #6B5544;
+    margin: 0 0 10px;
+}
+
+.team-card p {
+    font-size: 16px;
+    color: #6B5544;
+    opacity: 0.9;
+}
+
+/* Анимация появления карточек команды */
+.team-card:nth-child(1) { animation-delay: 0.2s; }
+.team-card:nth-child(2) { animation-delay: 0.4s; }
+.team-card:nth-child(3) { animation-delay: 0.6s; }
+
+/* === Ценности === */
+.values {
+    padding: 140px 0;
+    background: #FDF9F4;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.value-card {
+    background: white;
+    padding: 50px 30px;
+    border-radius: 32px;
+    text-align: center;
+    box-shadow: 0 15px 45px rgba(180,150,120,0.18);
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.value-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(180,150,120,0.3);
+}
+
+.value-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.value-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: #6B5544;
+    margin: 0 0 16px;
+}
+
+.value-card p {
+    font-size: 17px;
+    color: #4A3A2C;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Анимация появления ценностей */
+.value-card:nth-child(1) { animation-delay: 0.2s; }
+.value-card:nth-child(2) { animation-delay: 0.4s; }
+.value-card:nth-child(3) { animation-delay: 0.6s; }
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .about-hero .hero-title { font-size: 48px; }
+    .about-hero .hero-subtitle { font-size: 20px; }
+
+    .timeline::before { left: 30px; }
+    .timeline-item { width: 100%; padding-left: 70px; padding-right: 20px; text-align: left !important; }
+    .timeline-item:nth-child(odd), .timeline-item:nth-child(even) { left: 0; }
+    .timeline-item .timeline-dot { left: 20px; }
+}
+
+.product-details {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 33em;
+    justify-content: space-around;
+}
+
+.product-details > * {
+    margin: 0;
+}
+
+.product-details .add-to-cart {
+    width: 12em;
+}

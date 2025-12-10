@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар - Пекарня "Янчик-Пеканчик"</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/product.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    {{{ header }}}
+</header>
+
+    <main>
+        <section class="product">
+            <div class="container">
+                <div class="product-content">
+                    <div class="product-image-container">
+                        <img id="product-image" src="/images/products/{{ product.filename }}" alt="Картинка {{ product.title }}" class="product-img">
+                    </div>
+                    <div class="product-details">
+                        <h1 id="product-name" class="product-title">{{ product.title }}</h1>
+                        <p id="product-price" class="product-price">{{ product.price }} руб.</p>
+                        <p id="product-description" class="product-desc">{{ product.description }}</p>
+                        <p id="product-composition" class="product-composition"><strong>Состав: </strong>{{ product.composition }}</p>
+                        <table id="product-nutrition" class="nutrition-table">
+                            <thead>
+                                <tr>
+                                    <th>Калории</th>
+                                    <th>Белки</th>
+                                    <th>Жиры</th>
+                                    <th>Углеводы</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="calories">{{ product.food_value_kcal }} ккал</td>
+                                    <td id="proteins">{{ product.proteins_g }} г</td>
+                                    <td id="fats">{{ product.fats_g }} г</td>
+                                    <td id="carbs">{{ product.carbohydrates_g }} г</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button onclick="addToCart({{ product.id }})" class="btn btn-primary add-to-cart">В корзину</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        {{{ footer }}}
+    </footer>
+
+    <script src="/javascripts/script.js"></script>
+
+    <script>
+        const product = {{{productJson}}};
+
+
+        function addToCart(id) {
+            const quantity = (cart.find(item => item.id === id)?.quantity || 0) + 1;
+            cart.push({ ...product, quantity: quantity});
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            showMessage('Товар в корзине');
+
+            const btn = document.querySelector(".add-to-cart");
+            btn.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => btn.style.animation = '', MIN_TIMEOUT * 5);
+        }
+
+    </script>
+</body>
+</html>

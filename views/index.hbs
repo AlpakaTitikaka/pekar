@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пекарня "Янчик-Пеканчик"</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/product.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    {{{ header }}}
+</header>
+
+<main>
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">Добро пожаловать в "Янчик-Пеканчик"!</h1>
+            <p class="hero-subtitle">Натуральная выпечка из свежих ингредиентов. Откройте для себя вкус настоящего хлеба.</p>
+            <a href="/catalog" class="btn btn-primary hero-btn">Перейти в каталог</a>
+            <div class="hero-bg-overlay"></div>
+        </div>
+    </section>
+
+    <section id="contacts" class="contacts-section">
+        <div class="container">
+            <h2 class="section-title">Пекарня «Янчик-Пеканчик»</h2>
+
+            <div class="contacts-grid">
+                <div class="contacts-map">
+                    <div id="yandex-map" class="yandex-map"></div>
+                </div>
+
+                <div class="contacts-info">
+                    <div class="contact-card">
+                        <div>
+                            <h3>Наш адрес</h3>
+                            <p>ул. Булочная, 1<br>Воронеж</p>
+                        </div>
+                        <div>
+                            <h3>Часы работы</h3>
+                            <p>Ежедневно с 7:00 до 21:00<br>Без выходных</p>
+                        </div>
+
+                        <div>
+                            <h3>Телефон</h3>
+                            <p><a href="tel:+74951234567" class="contact-link">+7 (495) 123-45-67</a></p>
+                        </div>
+
+                        <div>
+                            <h3>Email</h3>
+                            <p><a href="mailto:info@pekanchick.ru" class="contact-link">info@pekanchick.ru</a></p>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-vk"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured">
+        <div class="container">
+            <h2 class="section-title">Популярные товары</h2>
+            <div class="product-grid">
+                {{#each popular}}
+                    <div class="product-card"
+                         data-category="{{this.category_id}}"
+                         data-price="{{this.price}}"
+                         style="opacity:0; transform:translateY(20px);">
+                        <img src="images/products/{{this.filename}}" alt="{{this.title}}">
+                        <div class="info">
+                            <h3>{{this.title}}</h3>
+                            <div class="price">{{this.price}} ₽</div>
+                            <a href="/product/{{this.id}}" class="btn btn-primary">Подробнее</a>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    {{{ footer }}}
+</footer>
+
+<script src="javascripts/script.js"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=3b7332d1-075a-495e-a050-84855d5fcc43&lang=ru_RU"></script>
+<script defer>
+    const cards = document.querySelectorAll('.product-card');
+    console.log(cards)
+    for (let i = 0; i <= cards.length; i++) {
+        setTimeout(() => {
+            cards[i].style.transition = 'all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            cards[i].style.opacity = '1';
+            cards[i].style.transform = 'translateY(-2px)';
+        }, i * MIN_TIMEOUT);
+    }
+
+    initMap();
+
+
+    function initMap() {
+        ymaps.ready(function () {
+            const myMap = new ymaps.Map('yandex-map', MAP_SETTINGS);
+
+            clearMap(myMap);
+
+            var placemark = new ymaps.Placemark(
+                    ...PLACEMARK_SETTINGS
+            );
+
+            myMap.geoObjects.add(placemark);
+
+            myMap.panes.get('ground').getElement().style.filter = FILTER;
+        });
+    }
+
+
+</script>
+
+</body>
+</html>
